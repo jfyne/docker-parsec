@@ -17,10 +17,12 @@ if [[ -n "$(docker ps -qaf 'name=parsec')" ]]; then
 else
     USER_UID=$(id -u)
     USER_GID=$(id -g)
+    VIDEO_GID=$(cut -d: -f3 < <(getent group video))
 
     docker run --rm --name parsec \
         -e USER_UID=${USER_UID} \
         -e USER_GID=${USER_GID} \
+        -e VIDEO_GID=${VIDEO_GID} \
         -e DISPLAY=unix${DISPLAY} \
         -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
         -v /run/user/${USER_UID}/pulse:/run/pulse:ro \
